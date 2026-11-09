@@ -1,0 +1,4 @@
+# Finales de línea fijos: el script remoto corre en Linux (LF) y el .bat en Windows (CRLF).
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary

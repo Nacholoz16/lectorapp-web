@@ -1,0 +1,11 @@
+# Lo que NO se copia a la imagen de Docker (la imagen se construye desde cero con npm ci)
+node_modules
+dist
+dist-ssr
+.git
+.gitignore
+deploy
+*.md
+*.log
+.env
+.env.*

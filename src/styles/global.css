@@ -1,0 +1,250 @@
+/*
+ * Hoja de estilos única de la web. Se enlaza desde index.html (nunca estilos inline:
+ * la CSP del servidor los bloquea).
+ *
+ * Fuentes auto-alojadas con @fontsource: Vite copia los .woff2 a dist/assets/ y la web
+ * no pide nada a Google ni a otros terceros. Solo el subconjunto "latin" (cubre el español:
+ * á, é, ñ, ¿, ¡…); otros alfabetos caen en la fuente del sistema.
+ */
+@import '@fontsource/lora/latin-700.css';
+@import '@fontsource/nunito/latin-400.css';
+@import '@fontsource/nunito/latin-600.css';
+@import '@fontsource/nunito/latin-700.css';
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 var(--s12);
+}
+
+h1 {
+  font-size: clamp(1.75rem, 4vw + 1rem, 2.5rem);
+}
+
+h2 {
+  font-size: 1.375rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+p {
+  margin: 0 0 var(--s16);
+}
+
+a {
+  color: var(--ink);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- Enlace "Saltar al contenido" (visible solo con el teclado) --- */
+.skip-link {
+  position: absolute;
+  left: var(--s16);
+  top: -100px;
+  z-index: 10;
+  padding: var(--s8) var(--s16);
+  background: var(--ink);
+  color: var(--on-ink);
+  border-radius: var(--r-pill);
+}
+
+.skip-link:focus {
+  top: var(--s16);
+}
+
+/* --- Contenedor centrado --- */
+.container {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: var(--s16);
+}
+
+/* --- Cabecera --- */
+.site-header {
+  border-bottom: 1px solid var(--outline);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  min-height: 4rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s12);
+  min-height: 48px; /* objetivo táctil mínimo */
+  color: var(--text);
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-small);
+}
+
+/* --- Contenido --- */
+main {
+  flex: 1;
+  padding-block: var(--s48);
+}
+
+.lead {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: var(--s12);
+  padding: var(--s4) var(--s12);
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  /* --text y no --ink: ink sobre el pastel al 15 % da 4.2:1 en claro (no llega a AA). */
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
+  gap: var(--s16);
+  margin: var(--s32) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  padding: var(--s20);
+  border-radius: var(--r-card);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--outline);
+}
+
+.card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--s12) var(--s24);
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--on-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* --- Pie --- */
+.site-footer {
+  border-top: 1px solid var(--outline);
+  padding-block: var(--s24);
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s12) var(--s24);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s4) var(--s16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
+/* Texto solo para lectores de pantalla (p. ej. títulos de sección que no se ven). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

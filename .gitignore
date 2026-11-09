@@ -1,0 +1,19 @@
+# Dependencias y salidas de build (se regeneran con npm ci / npm run build)
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Logs y archivos del sistema/editor
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Secretos: esta web no usa ninguno, pero por si acaso
+.env
+.env.*
+*.ppk

@@ -1,0 +1,63 @@
+/*
+ * Tokens del sistema de diseño de LectorApp (mismos valores que la app:
+ * lib/services/theme_service.dart y la skill lectorapp-design-system).
+ *
+ * Regla de color: el pastel (--accent) es SOLO para fondos y decoración.
+ * Texto, enlaces y botones usan --ink, que cumple contraste WCAG AA (≥ 4.5:1).
+ */
+:root {
+  /* Crema & Salvia (tema claro por defecto) */
+  --bg: #fdfbf7;
+  --card: #ffffff;
+  --accent: #8ba89f;          /* pastel: fondos suaves, nunca texto */
+  --accent-soft: rgb(139 168 159 / 0.15);
+  --ink: #4f7a70;             /* 4.67:1 sobre --bg; blanco encima 4.83:1 */
+  --on-ink: #ffffff;
+  --text: #3d4042;            /* 10.1:1 sobre --bg */
+  --text-secondary: #6b6f72;  /* 4.9:1 sobre --bg, 5.1:1 sobre --card */
+  --outline: #e3e1dc;
+  --focus: #4f7a70;
+  --shadow: 0 8px 24px rgb(139 168 159 / 0.1);
+
+  /* Tipografía */
+  --font-title: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Espaciado (múltiplos de 4) */
+  --s4: 0.25rem;
+  --s8: 0.5rem;
+  --s12: 0.75rem;
+  --s16: 1rem;
+  --s20: 1.25rem;
+  --s24: 1.5rem;
+  --s32: 2rem;
+  --s48: 3rem;
+
+  /* Radios: pequeño, tarjeta, píldora */
+  --r-small: 12px;
+  --r-card: 20px;
+  --r-pill: 999px;
+
+  --content-width: 46rem;
+
+  color-scheme: light;
+}
+
+/* Café de Medianoche (tema oscuro), según la preferencia del sistema. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1917;
+    --card: #292524;
+    --accent: #b59e86;
+    --accent-soft: rgb(181 158 134 / 0.15);
+    --ink: #b59e86;           /* 6.8:1 sobre --bg, 5.9:1 sobre --card */
+    --on-ink: #1c1917;        /* 6.8:1 sobre --ink */
+    --text: #e7e5e4;
+    --text-secondary: #a8a29e; /* 6.9:1 sobre --bg, 6.0:1 sobre --card */
+    --outline: #44403c;
+    --focus: #b59e86;
+    --shadow: none;           /* en oscuro no hay sombra: se diferencia con --card */
+
+    color-scheme: dark;
+  }
+}

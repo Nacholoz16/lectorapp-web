@@ -1,0 +1,26 @@
+{
+  // Código que corre en Node durante el build: vite.config.ts y scripts/prerender.ts.
+  // Node 22.18+ ejecuta .ts directamente ("type stripping"): por eso solo se permite
+  // sintaxis de TypeScript que se pueda borrar sin transformar (erasableSyntaxOnly).
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": false,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["vite.config.ts", "scripts"]
+}
