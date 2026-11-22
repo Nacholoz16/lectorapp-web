@@ -1,6 +1,6 @@
 # lectorapp-web
 
-Web de **LectorApp** en `https://lectorapp.nacholoz3d.cl`: páginas públicas (portada, términos,
+Web de **LectorApp** en `https://lector.nacholoz3d.cl`: páginas públicas (portada, términos,
 privacidad, contacto) y, más adelante, el panel de administración en `/admin`.
 
 Reemplaza al front viejo (`lectorFront`, Ionic/Angular). Usa el mismo diseño que la app: colores
@@ -41,7 +41,7 @@ bash scripts/smoke-test.sh http://localhost:8088   # todas las comprobaciones �
 
 `scripts/smoke-test.sh` revisa estados, cabeceras (sin duplicados), caché, redirecciones y una lista
 de intentos de *open redirect* (`//evil.com/`, `/%5Cevil.com/`, `/%09/evil.com/`, `%0d%0a`…). Sirve
-también contra producción: `bash scripts/smoke-test.sh https://lectorapp.nacholoz3d.cl`.
+también contra producción: `bash scripts/smoke-test.sh https://lector.nacholoz3d.cl`.
 
 > En Git Bash, antepón `MSYS_NO_PATHCONV=1` al `docker run` (si no, convierte `/tmp` en una ruta de Windows).
 

@@ -5,7 +5,7 @@
 #
 # Uso:  bash scripts/smoke-test.sh [URL-base]      (por defecto http://127.0.0.1:8088)
 #   Local:       docker run ... -p 127.0.0.1:8088:8080 lectorapp-web:local  y luego este script
-#   Producción:  bash scripts/smoke-test.sh https://lectorapp.nacholoz3d.cl
+#   Producción:  bash scripts/smoke-test.sh https://lector.nacholoz3d.cl
 # Sale con código 1 si algo falla.
 # =============================================================================
 set -uo pipefail

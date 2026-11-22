@@ -1,6 +1,6 @@
 # Despliegue de lectorapp-web
 
-Producción: `https://lectorapp.nacholoz3d.cl`, servidor `ubuntu@155.181.180.178` (ARM64, Docker),
+Producción: `https://lector.nacholoz3d.cl`, servidor `ubuntu@155.181.180.178` (ARM64, Docker),
 el mismo de la API. La web es un **stack de Portainer propio** (`lectorapp-web`), separado del proyecto
 `lectorapp` de la API y la BD: desplegarla, romperla o borrarla **nunca toca `lectorAPI` ni `lectorDB`**.
 
@@ -21,7 +21,7 @@ red de Docker `red-global-proxy` (ya existe; el stack la usa como `external`).
 Portainer descarga `main`, **reconstruye la imagen** (`pull_policy: build` en `docker-compose.yml`) y
 recrea solo `lectorWeb`. Mientras se construye, la web anterior sigue atendiendo.
 
-Después: `bash scripts/smoke-test.sh https://lectorapp.nacholoz3d.cl` desde el PC (Git Bash) → "Todo OK".
+Después: `bash scripts/smoke-test.sh https://lector.nacholoz3d.cl` desde el PC (Git Bash) → "Todo OK".
 De vez en cuando, Portainer → **Images** → borrar las imágenes `lectorapp-web` sin uso.
 
 ## Rollback
@@ -37,7 +37,7 @@ git push origin main          # y luego "Pull and redeploy" en Portainer
 
 ## Primera instalación (se hace una sola vez, con confirmación del usuario)
 
-Hoy `lectorapp.nacholoz3d.cl` lo sirve el front viejo `lectorFront` (servicio `frontend` del proyecto
+Hoy `lector.nacholoz3d.cl` lo sirve el front viejo `lectorFront` (servicio `frontend` del proyecto
 `lectorapp`). El orden busca que la web no quede caída: primero se levanta la nueva, después se cambia
 el proxy y al final se elimina la vieja.
 
@@ -52,7 +52,7 @@ docker inspect lectorFront > "backups/lectorFront-inspect-$FECHA.json"
 ```
 
 En Nginx Proxy Manager, anotar (o hacer captura) de la configuración actual del proxy host
-`lectorapp.nacholoz3d.cl` (destino, certificado, opciones).
+`lector.nacholoz3d.cl` (destino, certificado, opciones).
 
 ### 2. Crear el stack en Portainer
 
@@ -77,18 +77,18 @@ docker exec lectorWeb wget -S -q -O /dev/null http://127.0.0.1:8080/  # → 200 
 
 ### 3. Apuntar Nginx Proxy Manager a la web nueva
 
-Proxy host `lectorapp.nacholoz3d.cl`:
+Proxy host `lector.nacholoz3d.cl`:
 
 | Campo | Valor |
 |---|---|
 | Scheme / Forward Hostname / Port | `http` / `lectorWeb` / `8080` |
 | Block Common Exploits | Sí |
-| SSL | Certificado Let's Encrypt de `lectorapp.nacholoz3d.cl` (el actual o uno nuevo) |
+| SSL | Certificado Let's Encrypt de `lector.nacholoz3d.cl` (el actual o uno nuevo) |
 | Force SSL · HTTP/2 | Sí · Sí |
 | **HSTS Enabled** | **No**: el contenedor ya envía `Strict-Transport-Security`; activarlo aquí la duplicaría |
 | Advanced / Custom headers | Nada: todas las cabeceras las pone el contenedor |
 
-**No cambiar el DNS**: el subdominio también tiene los registros de correo de ZeptoMail
+**No tocar `lectorapp.nacholoz3d.cl`**: no es la web; solo existe para el correo de ZeptoMail
 (`noreply@lectorapp.nacholoz3d.cl`, usado por "Olvidé mi contraseña").
 
 ### 4. Eliminar el front viejo (por SSH)
@@ -107,16 +107,16 @@ La carpeta `frontend/` puede borrarse más adelante (queda el `.tgz` en `backups
 ### 5. Verificar
 
 ```bash
-curl -I https://lectorapp.nacholoz3d.cl/            # 200 + cabeceras de seguridad
-curl -I https://lectorapp.nacholoz3d.cl/no-existe   # 404
-curl -I http://lectorapp.nacholoz3d.cl/             # 301 → https
-curl -I 'https://lectorapp.nacholoz3d.cl/%5Cevil.com/'  # 404, sin Location hacia otro sitio
+curl -I https://lector.nacholoz3d.cl/            # 200 + cabeceras de seguridad
+curl -I https://lector.nacholoz3d.cl/no-existe   # 404
+curl -I http://lector.nacholoz3d.cl/             # 301 → https
+curl -I 'https://lector.nacholoz3d.cl/%5Cevil.com/'  # 404, sin Location hacia otro sitio
 curl https://api.nacholoz3d.cl/api/health           # la API sigue OK (no se reinició)
-bash scripts/smoke-test.sh https://lectorapp.nacholoz3d.cl   # desde el PC, en Git Bash → "Todo OK"
+bash scripts/smoke-test.sh https://lector.nacholoz3d.cl   # desde el PC, en Git Bash → "Todo OK"
 ```
 
-- Cabeceras: <https://securityheaders.com/?q=lectorapp.nacholoz3d.cl> → nota **A** o mejor.
-- TLS: <https://www.ssllabs.com/ssltest/analyze.html?d=lectorapp.nacholoz3d.cl>.
+- Cabeceras: <https://securityheaders.com/?q=lector.nacholoz3d.cl> → nota **A** o mejor.
+- TLS: <https://www.ssllabs.com/ssltest/analyze.html?d=lector.nacholoz3d.cl>.
 - `docker ps` → `lectorAPI` y `lectorDB` con el mismo "Up …" de antes.
 
 ### Volver atrás (si algo sale mal)
