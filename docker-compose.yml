@@ -1,0 +1,44 @@
+# =============================================================================
+# Stack de Portainer "lectorapp-web" (Stacks → Add stack → Repository).
+#
+# Portainer clona este repo, construye la imagen con el Dockerfile y levanta el
+# contenedor. Es un stack SEPARADO del de la API y la BD (proyecto `lectorapp`):
+# desplegar, romper o borrar la web nunca toca lectorAPI ni lectorDB.
+# Ver DEPLOY.md.
+# =============================================================================
+services:
+  web:
+    build:
+      context: .
+    image: lectorapp-web:latest
+    # Reconstruir SIEMPRE la imagen al desplegar. Sin esto, si la imagen ya existe,
+    # "Pull and redeploy" volvería a levantar la versión vieja.
+    pull_policy: build
+    container_name: lectorWeb
+    restart: unless-stopped
+    # Sin `ports:`: no se publica en el host. Nginx Proxy Manager lo alcanza por la red
+    # compartida en http://lectorWeb:8080.
+    expose:
+      - "8080"
+    networks:
+      - red-global-proxy
+    # Endurecimiento: sistema de archivos de solo lectura (Nginx solo escribe en /tmp),
+    # sin capacidades de Linux y sin escalar privilegios.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  # Red ya existente en el servidor, la misma que usa nginx_proxy. La web NO entra a
+  # la red interna de la API (lectorapp_red-interna): no la necesita.
+  red-global-proxy:
+    external: true

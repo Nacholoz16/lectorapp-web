@@ -4,7 +4,7 @@ dist
 dist-ssr
 .git
 .gitignore
-deploy
+docker-compose.yml
 *.md
 *.log
 .env

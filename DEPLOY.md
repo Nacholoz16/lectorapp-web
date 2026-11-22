@@ -1,56 +1,47 @@
 # Despliegue de lectorapp-web
 
 Producción: `https://lectorapp.nacholoz3d.cl`, servidor `ubuntu@155.181.180.178` (ARM64, Docker),
-el mismo de la API. El HTTPS lo pone **Nginx Proxy Manager** (`nginx_proxy`), que reenvía al
-contenedor `lectorWeb` por la red de Docker.
+el mismo de la API. La web es un **stack de Portainer propio** (`lectorapp-web`), separado del proyecto
+`lectorapp` de la API y la BD: desplegarla, romperla o borrarla **nunca toca `lectorAPI` ni `lectorDB`**.
 
-```
-/home/ubuntu/[LECTORAPP]/
-├── docker-compose.yml   # servicios: db (lectorDB), api (lectorAPI), web (lectorWeb)
-├── .env                 # secretos de la API (la web no usa ninguno)
-├── api/                 # clon del repo de la API
-├── web/                 # clon de ESTE repo
-└── backups/
-```
+El HTTPS lo pone **Nginx Proxy Manager** (`nginx_proxy`), que reenvía a `http://lectorWeb:8080` por la
+red de Docker `red-global-proxy` (ya existe; el stack la usa como `external`).
 
 > La web **no tiene secretos**: todo lo que hay en este repo termina siendo público en el navegador.
 
 ---
 
-## Deploy normal (desde tu PC con Windows)
+## Deploy normal
 
 1. En local: `npm run lint` y `npm run build` sin errores.
 2. Sube a GitHub: `git push origin main`.
-3. Ejecuta **`deploy\deploy.bat`**.
+3. Portainer → **Stacks → lectorapp-web → Pull and redeploy** (o espera a la actualización
+   automática, si está activada).
 
-El `.bat` entra por SSH (PuTTY/`plink` + la misma llave `.ppk` de la API, o la de
-`LECTORAPP_SSH_KEY`), deja `web/` en `origin/main` y ejecuta `deploy/remote-deploy.sh`, que:
+Portainer descarga `main`, **reconstruye la imagen** (`pull_policy: build` en `docker-compose.yml`) y
+recrea solo `lectorWeb`. Mientras se construye, la web anterior sigue atendiendo.
 
-1. Construye la imagen nueva (la web actual sigue atendiendo; si el build falla, no se toca nada).
-2. Recrea **solo** `lectorWeb` con `--no-deps` → **la API y la BD no se reinician**.
-3. Espera a que el contenedor esté `healthy` y comprueba que `/` responde 200 con CSP y HSTS.
-4. Borra las imágenes viejas de la web que quedaron sin uso.
-
-Al final el `.bat` muestra las cabeceras públicas de `https://lectorapp.nacholoz3d.cl/`.
+Después: `bash scripts/smoke-test.sh https://lectorapp.nacholoz3d.cl` desde el PC (Git Bash) → "Todo OK".
+De vez en cuando, Portainer → **Images** → borrar las imágenes `lectorapp-web` sin uso.
 
 ## Rollback
 
-```bat
-deploy\deploy.bat <commit-anterior>
-```
+La web no tiene base de datos ni migraciones: volver atrás es desplegar el código anterior.
 
-(`git log --oneline` muestra los commits.) La web no tiene base de datos ni migraciones: volver a un
-commit anterior es reconstruir esa versión.
+```bash
+git revert <commit-malo>      # crea un commit que deshace el cambio
+git push origin main          # y luego "Pull and redeploy" en Portainer
+```
 
 ---
 
-## Primera instalación (plan — se hace una sola vez, con confirmación del usuario)
+## Primera instalación (se hace una sola vez, con confirmación del usuario)
 
-Hoy `lectorapp.nacholoz3d.cl` lo sirve el front viejo `lectorFront` (servicio `frontend`). El orden
-de los pasos busca que la web no quede caída: primero se levanta la nueva, después se cambia el proxy
-y al final se elimina la vieja.
+Hoy `lectorapp.nacholoz3d.cl` lo sirve el front viejo `lectorFront` (servicio `frontend` del proyecto
+`lectorapp`). El orden busca que la web no quede caída: primero se levanta la nueva, después se cambia
+el proxy y al final se elimina la vieja.
 
-### 1. Respaldar el front viejo y la configuración
+### 1. Respaldar el front viejo (por SSH)
 
 ```bash
 cd "/home/ubuntu/[LECTORAPP]"
@@ -58,41 +49,33 @@ FECHA=$(date +%F)
 cp docker-compose.yml "backups/docker-compose-$FECHA.yml"
 tar czf "backups/frontend-$FECHA.tgz" frontend
 docker inspect lectorFront > "backups/lectorFront-inspect-$FECHA.json"
-# Anotar las redes del front viejo: la web nueva debe estar en las mismas (para que NPM la alcance)
-docker inspect lectorFront --format '{{json .NetworkSettings.Networks}}'
 ```
 
 En Nginx Proxy Manager, anotar (o hacer captura) de la configuración actual del proxy host
 `lectorapp.nacholoz3d.cl` (destino, certificado, opciones).
 
-### 2. Clonar este repo
+### 2. Crear el stack en Portainer
+
+**Stacks → Add stack**:
+
+| Campo | Valor |
+|---|---|
+| Name | `lectorapp-web` |
+| Build method | **Repository** |
+| Repository URL | `https://github.com/Nacholoz16/lectorapp-web` (público: sin autenticación) |
+| Repository reference | `refs/heads/main` |
+| Compose path | `docker-compose.yml` |
+| GitOps updates | Opcional: *Polling* cada 5 min (despliega solo tras cada push) o *Webhook* |
+| Environment variables | Ninguna |
+
+**Deploy the stack**. Comprobar en **Containers** que `lectorWeb` queda `healthy`, o por SSH:
 
 ```bash
-cd "/home/ubuntu/[LECTORAPP]"
-git clone https://github.com/<usuario>/lectorapp-web.git web
-```
-
-### 3. Añadir el servicio `web` al `docker-compose.yml`
-
-Copiar el servicio de [`deploy/docker-compose.snippet.yml`](deploy/docker-compose.snippet.yml) bajo
-`services:`. Si `frontend` tenía un bloque `networks:`, copiarlo igual en `web`. Comprobar:
-
-```bash
-docker compose config -q && docker compose config --services   # debe listar db, api, frontend, web
-```
-
-### 4. Levantar la web nueva (sin tocar la API ni la BD)
-
-```bash
-docker compose build web
-docker compose up -d --no-deps web
 docker inspect --format '{{.State.Health.Status}}' lectorWeb        # → healthy
 docker exec lectorWeb wget -S -q -O /dev/null http://127.0.0.1:8080/  # → 200 + cabeceras
 ```
 
-Si `nginx_proxy` no comparte red con `lectorWeb`: `docker network connect <red> nginx_proxy`.
-
-### 5. Apuntar Nginx Proxy Manager a la web nueva
+### 3. Apuntar Nginx Proxy Manager a la web nueva
 
 Proxy host `lectorapp.nacholoz3d.cl`:
 
@@ -108,11 +91,12 @@ Proxy host `lectorapp.nacholoz3d.cl`:
 **No cambiar el DNS**: el subdominio también tiene los registros de correo de ZeptoMail
 (`noreply@lectorapp.nacholoz3d.cl`, usado por "Olvidé mi contraseña").
 
-### 6. Eliminar el front viejo
+### 4. Eliminar el front viejo (por SSH)
 
 Cuando la web nueva responda bien por HTTPS:
 
 ```bash
+cd "/home/ubuntu/[LECTORAPP]"
 docker stop lectorFront && docker rm lectorFront
 # Quitar el servicio `frontend` del docker-compose.yml y validar:
 docker compose config -q
@@ -120,7 +104,7 @@ docker compose config -q
 
 La carpeta `frontend/` puede borrarse más adelante (queda el `.tgz` en `backups/`).
 
-### 7. Verificar
+### 5. Verificar
 
 ```bash
 curl -I https://lectorapp.nacholoz3d.cl/            # 200 + cabeceras de seguridad
@@ -138,9 +122,10 @@ bash scripts/smoke-test.sh https://lectorapp.nacholoz3d.cl   # desde el PC, en G
 ### Volver atrás (si algo sale mal)
 
 1. En NPM, devolver el proxy host a su destino anterior.
-2. `cp "backups/docker-compose-<FECHA>.yml" docker-compose.yml && docker compose up -d --no-deps frontend`
-   (si ya se había borrado `frontend/`, restaurarla antes con `tar xzf backups/frontend-<FECHA>.tgz`).
-3. `docker stop lectorWeb && docker rm lectorWeb`.
+2. Si ya se había borrado `lectorFront`:
+   `cp "backups/docker-compose-<FECHA>.yml" docker-compose.yml && docker compose up -d --no-deps frontend`
+   (si también se borró `frontend/`, restaurarla antes con `tar xzf backups/frontend-<FECHA>.tgz`).
+3. Portainer → Stacks → `lectorapp-web` → **Delete** (no afecta a la API ni a la BD).
 
 ---
 

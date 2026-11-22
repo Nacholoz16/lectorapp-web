@@ -138,13 +138,11 @@ La configuración del servidor web dentro del contenedor:
   `Permissions-Policy`, `X-Frame-Options`, `Cross-Origin-Opener/Resource-Policy`. Cada una está
   explicada en el archivo.
 
-### Scripts de deploy (`deploy/`)
-- `deploy.bat` (se ejecuta en **tu PC**): entra al servidor por SSH con PuTTY/`plink` y la llave
-  `.ppk` (la misma de la API), deja el repo del servidor en el commit pedido y ejecuta el script remoto.
-- `remote-deploy.sh` (se ejecuta **en el servidor**): construye la imagen nueva mientras la web vieja
-  sigue funcionando, recrea **solo** el contenedor `lectorWeb` (`--no-deps`: la API y la BD no se
-  tocan), espera a que esté sano y comprueba que la portada responde con sus cabeceras de seguridad.
-- `docker-compose.snippet.yml`: el servicio `web` que hay que añadir al `docker-compose.yml` del servidor.
+### `docker-compose.yml` (stack de Portainer)
+La web se despliega como un **stack de Portainer separado** del de la API y la BD: Portainer clona
+este repo, construye la imagen con el `Dockerfile` (`pull_policy: build` obliga a reconstruirla en
+cada despliegue) y levanta `lectorWeb` en la red `red-global-proxy`, la misma de Nginx Proxy Manager.
+Si la web falla o se borra, la API y la base de datos no se enteran.
 
 Cómo desplegar, hacer rollback y la primera instalación: ver **[DEPLOY.md](DEPLOY.md)**.
 
@@ -167,7 +165,7 @@ lectorapp-web/
 ├── scripts/smoke-test.sh      # Prueba con curl: cabeceras, caché, redirecciones, open redirect
 ├── nginx/                     # default.conf + security-headers.conf
 ├── Dockerfile
-├── deploy/                    # deploy.bat, remote-deploy.sh, docker-compose.snippet.yml
+├── docker-compose.yml         # Stack de Portainer (solo la web)
 ├── vite.config.ts, eslint.config.js, tsconfig*.json
 └── DEPLOY.md
 ```
