@@ -92,6 +92,12 @@ const SECTIONS: readonly LegalSection[] = [
             anotamos como revocada.
           </li>
           <li>
+            <strong>Aceptación de los términos:</strong> la versión de los Términos y la Política
+            de privacidad que aceptaste (por ejemplo, «2026-11») y la fecha en que lo hiciste, al
+            crear tu cuenta o antes de publicar por primera vez. Nos sirve como constancia y para
+            saber si tenemos que pedirte que aceptes una versión nueva.
+          </li>
+          <li>
             <strong>Códigos de recuperación:</strong> si pides crear una contraseña nueva, te
             enviamos un código de 6 dígitos. Guardamos solo un resumen cifrado del código, su
             vencimiento y cuántas veces se intentó usar.
@@ -130,6 +136,10 @@ const SECTIONS: readonly LegalSection[] = [
         <ul>
           <li>tus credenciales de sesión, en el almacenamiento cifrado de Android;</li>
           <li>tu identificador interno, tu nombre de usuario y tu avatar, para mostrarlos al abrir la app;</li>
+          <li>
+            qué versión de los términos aceptaste, para preguntarte antes de publicar si falta
+            aceptar la vigente;
+          </li>
           <li>una copia de la primera página del feed, para mostrarla sin conexión;</li>
           <li>tus preferencias (tema de colores y vista del feed);</li>
           <li>los borradores del formulario de lectura, para que no pierdas lo que escribiste;</li>

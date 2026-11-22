@@ -354,8 +354,10 @@ export function TermsPage() {
       intro={
         <>
           <p className="lead">
-            Las reglas para usar LectorApp, escritas para que se entiendan. Al crear una cuenta o
-            usar la app aceptas estos términos.
+            Las reglas para usar LectorApp, escritas para que se entiendan. Para crear una cuenta
+            tienes que aceptarlas, junto con la Política de privacidad, marcando la casilla del
+            registro. Si tu cuenta es anterior, te pediremos aceptarlas la primera vez que quieras
+            publicar algo; guardar tus lecturas en privado no lo requiere.
           </p>
           <p>
             Lo que hacemos con tus datos está en la{' '}
