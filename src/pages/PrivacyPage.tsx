@@ -151,6 +151,8 @@ const SECTIONS: readonly LegalSection[] = [
         <p>
           Al cerrar sesión se borran las credenciales, tus datos de usuario y la copia del feed.
           Los borradores y las preferencias quedan en el teléfono hasta que desinstales la app.
+          Si eliminas tu cuenta desde la app, además se borran del teléfono los borradores; solo
+          quedan tus preferencias de tema y de vista del feed, que no te identifican.
         </p>
 
         <h3>Lo que no recogemos</h3>
@@ -328,16 +330,20 @@ const SECTIONS: readonly LegalSection[] = [
             rápido.
           </li>
           <li>
-            <strong>Datos en tu teléfono:</strong> hasta que cierras sesión o desinstalas la app
+            <strong>Datos en tu teléfono:</strong> hasta que cierras sesión, eliminas tu cuenta o
+            desinstalas la app
             (ver la <a href="#datos">sección 3</a>).
           </li>
         </ul>
         <p>
-          <strong>Si eliminas tu cuenta</strong>, borramos tu cuenta y todo lo asociado a ella:
-          lecturas, reseñas, sesiones de lectura, metas, «me gusta», credenciales de sesión y
-          códigos de recuperación. Puede quedar una copia en respaldos puntuales guardados en el
-          mismo servidor, que solo usamos para recuperar el servicio ante un fallo y que borramos
-          cuando dejan de ser necesarios. El catálogo de libros se mantiene porque es
+          <strong>Si eliminas tu cuenta</strong>, borramos al instante tu cuenta y todo lo
+          asociado a ella: lecturas, reseñas, sesiones de lectura, metas, los «me gusta» que diste
+          y los que recibieron tus reseñas, credenciales de sesión y códigos de recuperación. Si
+          hubo acciones de moderación sobre tu cuenta, conservamos el registro interno de qué se
+          hizo y cuándo, pero sin el vínculo con tu cuenta. Puede quedar una copia en respaldos
+          puntuales guardados en el mismo servidor, que solo usamos para recuperar el servicio
+          ante un fallo y que borramos cuando dejan de ser necesarios, y los registros técnicos
+          se borran en los plazos de arriba. El catálogo de libros se mantiene porque es
           compartido y no contiene datos tuyos.
         </p>
       </>
@@ -362,10 +368,13 @@ const SECTIONS: readonly LegalSection[] = [
           privada, cambiar la visibilidad de tu perfil y tus estadísticas, y desactivar tu cuenta
           para tomarte un descanso (tus lecturas públicas pasan a privadas y tu perfil queda
           oculto hasta que la reactives; ver los{' '}
-          <a href="/terminos#desactivar">Términos</a>). Para todo lo demás,
-          incluido <strong>eliminar tu cuenta</strong>, escríbenos a <MailLink />{' '}
-          <strong>desde el correo de tu cuenta</strong> (así comprobamos que eres tú) e indica tu
-          nombre de usuario. Es gratis y te responderemos dentro de los plazos que fija la ley.
+          <a href="/terminos#desactivar">Términos</a>). También puedes{' '}
+          <strong>eliminar tu cuenta</strong> y todos sus datos en{' '}
+          <strong>Perfil → Ajustes → Cuenta → Eliminar mi cuenta</strong> (ver los{' '}
+          <a href="/terminos#eliminar">Términos</a>). Para todo lo demás, o si no puedes entrar a
+          la app, escríbenos a <MailLink /> <strong>desde el correo de tu cuenta</strong> (así
+          comprobamos que eres tú) e indica tu nombre de usuario. Es gratis y te responderemos
+          dentro de los plazos que fija la ley.
         </p>
         <p>
           Si no quedas conforme con nuestra respuesta, puedes reclamar ante la autoridad de

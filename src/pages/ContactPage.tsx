@@ -34,7 +34,9 @@ export function ContactPage() {
             <a href="/privacidad#derechos">tus derechos</a>).
           </li>
           <li>
-            <strong>Eliminar tu cuenta</strong> y todos sus datos, de forma definitiva.
+            <strong>Eliminar tu cuenta</strong> y todos sus datos, de forma definitiva, si no
+            puedes hacerlo tú en la app (<strong>Perfil → Ajustes → Cuenta → Eliminar mi
+            cuenta</strong>).
           </li>
         </ul>
       </section>

@@ -5,10 +5,10 @@ import { MailLink } from '../components/MailLink';
  * Términos y condiciones (tarea 1.1). Al cambiar el texto, actualizar LEGAL_VERSION y
  * LEGAL_UPDATED en src/legal.ts.
  *
- * Funciones descritas aquí que la app aún no tiene (denunciar, eliminar la cuenta, exportar,
- * apelar): el canal real mientras tanto es el correo de contacto. Desactivar y reactivar ya
- * están en la app (tarea 2.1). No enlazar a
- * /eliminar-cuenta ni /apelar hasta que existan (tareas 2.3 y 4.3–4.4).
+ * Funciones descritas aquí que la app aún no tiene (denunciar, exportar, apelar): el canal
+ * real mientras tanto es el correo de contacto. Desactivar, reactivar (tarea 2.1) y eliminar la
+ * cuenta (2.2) ya están en la app; el correo queda como alternativa para quien no pueda entrar.
+ * No enlazar a /eliminar-cuenta ni /apelar hasta que existan (tareas 2.3 y 4.3–4.4).
  */
 const SECTIONS: readonly LegalSection[] = [
   {
@@ -257,14 +257,21 @@ const SECTIONS: readonly LegalSection[] = [
     content: (
       <>
         <p>
-          Puedes pedir que eliminemos tu cuenta cuando quieras, también si está suspendida.
-          Escríbenos a <MailLink /> <strong>desde el correo de tu cuenta</strong> indicando tu
-          nombre de usuario.
+          Puedes eliminar tu cuenta cuando quieras desde la app, en{' '}
+          <strong>Perfil → Ajustes → Cuenta → Eliminar mi cuenta</strong>. Te explicaremos qué se
+          borra y te pediremos tu contraseña para confirmar. También funciona si tu cuenta está
+          desactivada.
+        </p>
+        <p>
+          Si no puedes entrar a la app (por ejemplo, porque tu cuenta está suspendida u olvidaste
+          tu contraseña y no puedes recuperarla), escríbenos a <MailLink />{' '}
+          <strong>desde el correo de tu cuenta</strong> indicando tu nombre de usuario.
         </p>
         <p>
           Eliminar es <strong>definitivo</strong>: borramos tu cuenta y todo lo asociado a ella
-          (lecturas, reseñas, sesiones de lectura, metas, «me gusta» y sesiones abiertas). No se
-          puede deshacer. El catálogo de libros (títulos, autores y portadas) se mantiene porque
+          (lecturas, reseñas, sesiones de lectura, metas, los «me gusta» que diste y los que
+          recibieron tus reseñas, y las sesiones abiertas en todos tus dispositivos). No se puede
+          deshacer. Tu nombre de usuario y tu correo quedan libres. El catálogo de libros (títulos, autores y portadas) se mantiene porque
           es compartido y no contiene datos tuyos. Los detalles están en la{' '}
           <a href="/privacidad#conservacion">Política de privacidad</a>.
         </p>
