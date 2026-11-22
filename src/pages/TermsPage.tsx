@@ -5,8 +5,9 @@ import { MailLink } from '../components/MailLink';
  * Términos y condiciones (tarea 1.1). Al cambiar el texto, actualizar LEGAL_VERSION y
  * LEGAL_UPDATED en src/legal.ts.
  *
- * Funciones descritas aquí que la app aún no tiene (denunciar, desactivar, eliminar la cuenta,
- * exportar, apelar): el canal real mientras tanto es el correo de contacto. No enlazar a
+ * Funciones descritas aquí que la app aún no tiene (denunciar, eliminar la cuenta, exportar,
+ * apelar): el canal real mientras tanto es el correo de contacto. Desactivar y reactivar ya
+ * están en la app (tarea 2.1). No enlazar a
  * /eliminar-cuenta ni /apelar hasta que existan (tareas 2.3 y 4.3–4.4).
  */
 const SECTIONS: readonly LegalSection[] = [
@@ -242,8 +243,10 @@ const SECTIONS: readonly LegalSection[] = [
           </li>
         </ul>
         <p>
-          La opción para desactivar y reactivar la cuenta llegará a la app. Mientras
-          tanto, pídelo escribiéndonos a <MailLink /> desde el correo de tu cuenta.
+          Puedes desactivarla en la app, en <strong>Perfil → Ajustes → Cuenta → Desactivar mi
+          cuenta</strong> (te pediremos tu contraseña para confirmar). Para volver, entra a la app
+          y toca <strong>Reactivar mi cuenta</strong>. Si no puedes hacerlo desde la app,
+          escríbenos a <MailLink /> desde el correo de tu cuenta.
         </p>
       </>
     ),

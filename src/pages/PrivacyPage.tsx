@@ -359,7 +359,10 @@ const SECTIONS: readonly LegalSection[] = [
         </ul>
         <p>
           Muchas cosas puedes hacerlas tú desde la app: ver, editar y borrar cada lectura, hacerla
-          privada y cambiar la visibilidad de tu perfil y tus estadísticas. Para todo lo demás,
+          privada, cambiar la visibilidad de tu perfil y tus estadísticas, y desactivar tu cuenta
+          para tomarte un descanso (tus lecturas públicas pasan a privadas y tu perfil queda
+          oculto hasta que la reactives; ver los{' '}
+          <a href="/terminos#desactivar">Términos</a>). Para todo lo demás,
           incluido <strong>eliminar tu cuenta</strong>, escríbenos a <MailLink />{' '}
           <strong>desde el correo de tu cuenta</strong> (así comprobamos que eres tú) e indica tu
           nombre de usuario. Es gratis y te responderemos dentro de los plazos que fija la ley.
