@@ -192,6 +192,76 @@ main {
   text-decoration: none;
 }
 
+/* Un botón con texto largo (p. ej. el correo de contacto) se parte en líneas en vez de
+   desbordar la pantalla en móviles estrechos. */
+.button {
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* --- Listas de contenido (contacto y documentos legales) --- */
+.plain-list,
+.legal ul,
+.legal ol {
+  margin: 0 0 var(--s16);
+  padding-left: 1.25rem;
+}
+
+.plain-list li + li,
+.legal li + li {
+  margin-top: var(--s8);
+}
+
+/* Separación entre secciones de las páginas de texto (no afecta a la portada). */
+.stack > section + section,
+.legal section + section {
+  margin-top: var(--s32);
+}
+
+/* --- Documentos legales (/terminos, /privacidad) --- */
+.legal {
+  /* Correos y URLs largas no desbordan en pantallas estrechas. */
+  overflow-wrap: break-word;
+}
+
+.legal-meta {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.legal h3 {
+  margin-top: var(--s24);
+}
+
+/* Al saltar a un ancla (#moderacion), el título no queda pegado al borde superior. */
+.legal section {
+  scroll-margin-top: var(--s16);
+}
+
+/* Índice "En esta página" */
+.toc {
+  margin: var(--s24) 0 var(--s32);
+}
+
+.toc h2 {
+  font-size: 1.125rem;
+}
+
+.legal .toc ol {
+  margin: 0;
+}
+
+.legal .toc li + li {
+  margin-top: var(--s4);
+}
+
+/* Enlaces del índice con algo de alto para tocarlos con el dedo (WCAG 2.2: ≥ 24 px). */
+.toc a {
+  display: inline-block;
+  padding-block: var(--s4);
+}
+
 /* --- Pie --- */
 .site-footer {
   border-top: 1px solid var(--outline);

@@ -42,6 +42,10 @@ expect_status /admin/ 404
 expect_status /.env 404
 expect_status /.git/config 404
 expect_status /healthz 200
+# Páginas legales (Play Console enlaza a /privacidad: un 404 ahí bloquea la ficha).
+expect_status /terminos 200
+expect_status /privacidad 200
+expect_status /contacto 200
 home="$(curl -s "$BASE/")"
 not_found="$(curl -s "$BASE/no-existe")"
 if grep -q '<h1' <<<"$home"; then pass "/ trae el contenido pre-renderizado (<h1>)"; else fail "/ sin <h1>"; fi

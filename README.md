@@ -94,15 +94,29 @@ producción bloquearía.
 En desarrollo pasa lo mismo, pero al vuelo: un pequeño plugin en `vite.config.ts` usa el mismo
 `entry-server.tsx` en cada petición. Lo que ves en `npm run dev` es lo que genera el build.
 
-**Añadir una página** (p. ej. `/terminos` en la tarea 5.2):
+**Añadir una página** (p. ej. `/apelar`, tarea 4.4):
 
-1. Crear `src/pages/TermsPage.tsx` (usa `HomePage.tsx` de ejemplo).
+1. Crear `src/pages/AppealPage.tsx` (usa `ContactPage.tsx` de ejemplo).
 2. Añadirla en `src/routes.tsx`:
    ```tsx
-   { path: '/terminos', file: 'terminos.html', title: 'Términos y condiciones',
-     description: '…', render: () => <TermsPage /> },
+   { path: '/apelar', file: 'apelar.html', title: 'Apelar una suspensión',
+     description: '…', render: () => <AppealPage /> },
    ```
-3. `npm run dev` para verla; `npm run build` genera `dist/terminos.html` y Nginx la sirve en `/terminos`.
+3. `npm run dev` para verla; `npm run build` genera `dist/apelar.html` y Nginx la sirve en `/apelar`.
+
+### Páginas legales (`/terminos`, `/privacidad`, `/contacto`)
+- El texto vive en `src/pages/TermsPage.tsx` y `src/pages/PrivacyPage.tsx`, como una lista de
+  secciones (`id`, título, contenido). `src/components/LegalPage.tsx` dibuja el título, la versión y
+  la fecha, el índice con anclas y las secciones numeradas.
+- **Al cambiar el texto** de cualquiera de los dos, actualizar `LEGAL_VERSION` y `LEGAL_UPDATED` en
+  `src/legal.ts` (la versión es la que la app registrará como aceptada, tarea 1.3).
+- No cambiar los `id` de las secciones: otras páginas (y la app) enlazan a ellos, p. ej.
+  `/privacidad#derechos` o `/terminos#moderacion`.
+- El correo de contacto está en un solo lugar: `SITE.contactEmail` (`src/site.ts`), y se enlaza con
+  el componente `MailLink`.
+- La política de privacidad describe lo que hacen la API y la app: si cambia lo que se recoge, se
+  guarda o se comparte con terceros, hay que actualizarla (y el formulario "Seguridad de los datos" de
+  Play Console).
 
 ### Estilos (`src/styles/`)
 - `tokens.css`: los **colores, espacios y radios** del sistema de diseño como variables CSS
@@ -157,9 +171,10 @@ lectorapp-web/
 ├── src/
 │   ├── entry-server.tsx       # render(ruta) → { status, head, html }
 │   ├── routes.tsx             # Tabla de páginas: ruta, archivo, título, descripción
-│   ├── site.ts                # Nombre, dominio y enlaces del pie
-│   ├── components/Layout.tsx  # Cabecera, "saltar al contenido" y pie
-│   ├── pages/                 # Una página por archivo (HomePage, NotFoundPage)
+│   ├── site.ts                # Nombre, dominio, correo de contacto y enlaces del pie
+│   ├── legal.ts               # Versión y fecha vigentes de términos y privacidad
+│   ├── components/            # Layout (cabecera y pie), LegalPage (documentos legales), MailLink
+│   ├── pages/                 # Una página por archivo (Home, Terms, Privacy, Contact, NotFound)
 │   └── styles/                # tokens.css (colores/espacios) y global.css
 ├── scripts/prerender.ts       # Genera dist/<página>.html
 ├── scripts/smoke-test.sh      # Prueba con curl: cabeceras, caché, redirecciones, open redirect
