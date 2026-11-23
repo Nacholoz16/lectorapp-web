@@ -1,7 +1,7 @@
 {
   "name": "lectorapp-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Web pública de LectorApp (páginas legales pre-renderizadas) y, más adelante, el panel /admin.",
   "type": "module",
   "engines": {
