@@ -11,8 +11,14 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 
 interface ServerEntry {
-  render: (url: string) => { status: number; head: string; html: string };
+  render: (url: string) => { status: number; head: string; html: string; clientScript: string | null };
 }
+
+/**
+ * Módulos de navegador (uno por página que lo necesite; ver `clientScript` en src/routes.tsx).
+ * Se compilan aparte de la plantilla; scripts/prerender.ts busca su nombre con hash en el manifiesto.
+ */
+const CLIENT_SCRIPTS = ['src/client/delete-account.ts'];
 
 function devPrerender(): Plugin {
   return {
@@ -33,9 +39,15 @@ function devPrerender(): Plugin {
             const template = await server.transformIndexHtml(url, raw);
             const entry = (await server.ssrLoadModule('/src/entry-server.tsx')) as ServerEntry;
             const page = entry.render(pathname);
+            // En desarrollo Vite sirve el .ts directamente; en el build va el archivo con hash.
+            const script = page.clientScript ? `<script type="module" src="/${page.clientScript}"></script>` : '';
             res.statusCode = page.status;
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
-            res.end(template.replace('<!--app-head-->', page.head).replace('<!--app-html-->', page.html));
+            res.end(
+              template
+                .replace('<!--app-head-->', () => page.head + script)
+                .replace('<!--app-html-->', () => page.html),
+            );
           } catch (error) {
             server.ssrFixStacktrace(error as Error);
             next(error);
@@ -46,7 +58,7 @@ function devPrerender(): Plugin {
   };
 }
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react(), devPrerender()],
   // "custom": Vite no sirve index.html por su cuenta; lo hace devPrerender.
   appType: 'custom',
@@ -56,5 +68,10 @@ export default defineConfig({
     assetsInlineLimit: 0,
     outDir: 'dist',
     emptyOutDir: true,
+    // dist/.vite/manifest.json: nombre con hash de cada módulo de navegador. Lo lee
+    // scripts/prerender.ts y luego lo borra (no se publica).
+    // (Solo en el build del navegador; el de SSR recibe su entrada por la línea de comandos.)
+    manifest: !isSsrBuild,
+    rolldownOptions: isSsrBuild ? {} : { input: ['index.html', ...CLIENT_SCRIPTS] },
   },
-});
+}));

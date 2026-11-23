@@ -46,25 +46,51 @@ expect_status /healthz 200
 expect_status /terminos 200
 expect_status /privacidad 200
 expect_status /contacto 200
+# Enlace registrado en Play Console para pedir el borrado de la cuenta (tarea 2.3).
+expect_status /eliminar-cuenta 200
 home="$(curl -s "$BASE/")"
 not_found="$(curl -s "$BASE/no-existe")"
 if grep -q '<h1' <<<"$home"; then pass "/ trae el contenido pre-renderizado (<h1>)"; else fail "/ sin <h1>"; fi
 if grep -qi '<script' <<<"$home"; then fail "/ contiene <script>"; else pass "/ sin <script>"; fi
 if grep -q 'No encontramos' <<<"$not_found"; then pass "/no-existe muestra la 404 propia"; else fail "/no-existe sin 404 propia"; fi
+# Solo /eliminar-cuenta lleva JavaScript, y únicamente un módulo propio desde /assets.
+for path in /terminos /privacidad /contacto; do
+    if grep -qi '<script' <<<"$(curl -s "$BASE$path")"; then fail "$path contiene <script>"; else pass "$path sin <script>"; fi
+done
+delete_page="$(curl -s "$BASE/eliminar-cuenta")"
+scripts_found="$(grep -o '<script[^>]*>' <<<"$delete_page")"
+js="$(grep -o 'src="/assets/[^"]*\.js"' <<<"$scripts_found" | cut -d'"' -f2)"
+if [ "$(grep -c '<script' <<<"$scripts_found")" = "1" ] && [ -n "$js" ] && grep -q 'type="module"' <<<"$scripts_found"; then
+    pass "/eliminar-cuenta carga un solo módulo propio ($js)"
+else
+    fail "/eliminar-cuenta: scripts inesperados: ${scripts_found:-ninguno}"
+fi
+if grep -q 'id="form-email"' <<<"$delete_page" && grep -q '<noscript>' <<<"$delete_page"; then
+    pass "/eliminar-cuenta trae el formulario pre-renderizado y el aviso <noscript>"
+else
+    fail "/eliminar-cuenta sin formulario o sin <noscript>"
+fi
+js_type="$([ -n "$js" ] && header_of "$js" content-type)"
+js_cache="$([ -n "$js" ] && header_of "$js" cache-control)"
+if [[ "$js_type" == *javascript* ]]; then pass "$js es JavaScript ($js_type)"; else fail "JS con tipo ${js_type:-nada}"; fi
+if [[ "$js_cache" == *immutable* ]]; then pass "$js immutable"; else fail "JS sin immutable (${js_cache})"; fi
 
 echo "== Cabeceras de seguridad (en 200, 404 y 301)"
-for path in / /no-existe /index.html; do
+for path in / /no-existe /index.html /eliminar-cuenta; do
     h="$(headers "$path")"
     for name in Content-Security-Policy Strict-Transport-Security X-Content-Type-Options Referrer-Policy Permissions-Policy X-Frame-Options; do
         count="$(grep -ic "^$name:" <<<"$h")"
         if [ "$count" = "1" ]; then pass "$path $name"; else fail "$path $name aparece $count veces"; fi
     done
 done
-csp="$(header_of / content-security-policy)"
-for directive in "script-src 'self'" "frame-ancestors 'none'" "object-src 'none'" "base-uri 'self'" "connect-src 'self' https://api.nacholoz3d.cl"; do
-    if grep -qF "$directive" <<<"$csp"; then pass "CSP: $directive"; else fail "CSP sin: $directive"; fi
+for csp_path in / /eliminar-cuenta; do
+    csp="$(header_of "$csp_path" content-security-policy)"
+    # connect-src: /eliminar-cuenta llama a la API con fetch; form-action: sus formularios.
+    for directive in "script-src 'self'" "frame-ancestors 'none'" "object-src 'none'" "base-uri 'self'" "connect-src 'self' https://api.nacholoz3d.cl" "form-action 'self'"; do
+        if grep -qF "$directive" <<<"$csp"; then pass "$csp_path CSP: $directive"; else fail "$csp_path CSP sin: $directive"; fi
+    done
+    if grep -qi "unsafe-inline\|unsafe-eval" <<<"$csp"; then fail "$csp_path CSP con unsafe-*"; else pass "$csp_path CSP sin unsafe-*"; fi
 done
-if grep -qi "unsafe-inline\|unsafe-eval" <<<"$csp"; then fail "CSP con unsafe-*"; else pass "CSP sin unsafe-*"; fi
 server_header="$(header_of / server)"
 if [[ "$server_header" =~ [0-9] ]]; then fail "Server anuncia versión: $server_header"; else pass "Server sin versión"; fi
 
@@ -80,6 +106,8 @@ expect_redirect /index /
 expect_redirect /index.html /
 expect_redirect /terminos/ /terminos
 expect_redirect /terminos.html /terminos
+expect_redirect /eliminar-cuenta/ /eliminar-cuenta
+expect_redirect /eliminar-cuenta.html /eliminar-cuenta
 expect_redirect /a/b// /a/b
 expect_redirect /admin /admin/
 expect_redirect '/terminos/?x=1' '/terminos?x=1'

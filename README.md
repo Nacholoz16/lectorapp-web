@@ -1,7 +1,7 @@
 # lectorapp-web
 
 Web de **LectorApp** en `https://lector.nacholoz3d.cl`: páginas públicas (portada, términos,
-privacidad, contacto) y, más adelante, el panel de administración en `/admin`.
+privacidad, contacto, eliminar la cuenta) y, más adelante, el panel de administración en `/admin`.
 
 Reemplaza al front viejo (`lectorFront`, Ionic/Angular). Usa el mismo diseño que la app: colores
 "Crema & Salvia" (modo claro) y "Café de Medianoche" (modo oscuro), títulos en **Lora** y texto en
@@ -26,6 +26,15 @@ Otros comandos:
 | `npm run preview` | Sirve `dist/` en http://localhost:4173 para mirarla antes de publicar (sin las cabeceras de Nginx) |
 | `npm run lint` | ESLint: busca errores y problemas de accesibilidad en el código |
 | `npm run typecheck` | Solo la revisión de tipos de TypeScript (`tsc --noEmit`) |
+
+Probar `/eliminar-cuenta` contra la API local (la API en el 3001 porque el 3000 puede estar ocupado;
+el puerto 4200 es un origen permitido por el CORS de la API en desarrollo):
+
+```bash
+# En ../Lectorapp API:   PORT=3001 npm run dev
+VITE_API_BASE=http://localhost:3001/api npx vite --port 4200
+# Sin SMTP configurado, la API escribe el correo (con el código) en su log.
+```
 
 Probar la imagen de Docker exactamente como en producción (necesitas Docker Desktop abierto):
 
@@ -63,6 +72,13 @@ página vive en `src/pages/`.
 Ojo: aquí React se usa **solo al compilar**, como motor de plantillas. El navegador recibe HTML y CSS
 puros, **sin JavaScript**. Las páginas legales no lo necesitan, cargan más rápido y la política de
 seguridad (CSP) puede ser muy estricta.
+
+**Única excepción: `/eliminar-cuenta`** (tarea 2.3). Necesita llamar a la API con `fetch`, así que
+declara `clientScript: 'src/client/delete-account.ts'` en `src/routes.tsx`. Ese módulo (TypeScript
+sin React) se compila aparte (`CLIENT_SCRIPTS` en `vite.config.ts`) y el pre-renderizado añade
+`<script type="module" src="/assets/delete-account-<hash>.js">` solo a esa página. El build falla
+si otra página lleva `<script>` sin declararlo. La URL de la API está en `SITE.apiBase`
+(`src/site.ts`) y debe coincidir con el `connect-src` de la CSP.
 
 ### TypeScript (`tsconfig*.json`)
 JavaScript con **tipos**: el editor y `tsc` avisan de errores (una propiedad mal escrita, un valor
@@ -174,7 +190,8 @@ lectorapp-web/
 │   ├── site.ts                # Nombre, dominio, correo de contacto y enlaces del pie
 │   ├── legal.ts               # Versión y fecha vigentes de términos y privacidad
 │   ├── components/            # Layout (cabecera y pie), LegalPage (documentos legales), MailLink
-│   ├── pages/                 # Una página por archivo (Home, Terms, Privacy, Contact, NotFound)
+│   ├── pages/                 # Una página por archivo (Home, Terms, Privacy, Contact, DeleteAccount, NotFound)
+│   ├── client/                # Únicos módulos de navegador (hoy: delete-account.ts)
 │   └── styles/                # tokens.css (colores/espacios) y global.css
 ├── scripts/prerender.ts       # Genera dist/<página>.html
 ├── scripts/smoke-test.sh      # Prueba con curl: cabeceras, caché, redirecciones, open redirect

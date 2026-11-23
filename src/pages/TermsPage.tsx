@@ -7,8 +7,9 @@ import { MailLink } from '../components/MailLink';
  *
  * Funciones descritas aquí que la app aún no tiene (denunciar, exportar, apelar): el canal
  * real mientras tanto es el correo de contacto. Desactivar, reactivar (tarea 2.1) y eliminar la
- * cuenta (2.2) ya están en la app; el correo queda como alternativa para quien no pueda entrar.
- * No enlazar a /eliminar-cuenta ni /apelar hasta que existan (tareas 2.3 y 4.3–4.4).
+ * cuenta (2.2) ya están en la app; eliminarla también en la web, /eliminar-cuenta (2.3). El correo
+ * queda como alternativa para quien no pueda usar ninguna de las dos.
+ * No enlazar a /apelar hasta que exista (tareas 4.3–4.4).
  */
 const SECTIONS: readonly LegalSection[] = [
   {
@@ -213,7 +214,8 @@ const SECTIONS: readonly LegalSection[] = [
             rechazamos, la decisión es definitiva;
           </li>
           <li>
-            pedir que eliminemos tu cuenta (<a href="#eliminar">sección 8</a>).
+            eliminar tu cuenta desde la web, en <a href="/eliminar-cuenta">Eliminar tu
+            cuenta</a> (ver la <a href="#eliminar">sección 8</a>).
           </li>
         </ul>
       </>
@@ -263,9 +265,11 @@ const SECTIONS: readonly LegalSection[] = [
           desactivada.
         </p>
         <p>
-          Si no puedes entrar a la app (por ejemplo, porque tu cuenta está suspendida u olvidaste
-          tu contraseña y no puedes recuperarla), escríbenos a <MailLink />{' '}
-          <strong>desde el correo de tu cuenta</strong> indicando tu nombre de usuario.
+          Si no tienes la app o no puedes entrar (por ejemplo, porque tu cuenta está suspendida),
+          puedes eliminarla desde la web en <a href="/eliminar-cuenta">Eliminar tu cuenta</a>:
+          te enviamos un código de 6 dígitos a tu correo y, al confirmarlo, la borramos.
+          Si tampoco puedes así (por ejemplo, porque ya no tienes acceso a ese correo),
+          escríbenos a <MailLink /> indicando tu nombre de usuario.
         </p>
         <p>
           Eliminar es <strong>definitivo</strong>: borramos tu cuenta y todo lo asociado a ella

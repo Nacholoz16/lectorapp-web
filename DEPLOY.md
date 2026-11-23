@@ -24,6 +24,11 @@ recrea solo `lectorWeb`. Mientras se construye, la web anterior sigue atendiendo
 Después: `bash scripts/smoke-test.sh https://lector.nacholoz3d.cl` desde el PC (Git Bash) → "Todo OK".
 De vez en cuando, Portainer → **Images** → borrar las imágenes `lectorapp-web` sin uso.
 
+> **`/eliminar-cuenta` depende de la API** (`POST /api/account/deletion-request` y
+> `/deletion-confirm`, migración paso 11 de la API). Despliega primero la API con su migración y
+> después la web; si no, la página carga pero el formulario responde "No pudimos conectar…" o 404.
+> Es la URL que se registra en Play Console ("Eliminar la cuenta").
+
 ## Rollback
 
 La web no tiene base de datos ni migraciones: volver atrás es desplegar el código anterior.

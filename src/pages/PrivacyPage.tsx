@@ -98,9 +98,9 @@ const SECTIONS: readonly LegalSection[] = [
             saber si tenemos que pedirte que aceptes una versión nueva.
           </li>
           <li>
-            <strong>Códigos de recuperación:</strong> si pides crear una contraseña nueva, te
-            enviamos un código de 6 dígitos. Guardamos solo un resumen cifrado del código, su
-            vencimiento y cuántas veces se intentó usar.
+            <strong>Códigos por correo:</strong> si pides crear una contraseña nueva o eliminar tu
+            cuenta desde la web, te enviamos un código de 6 dígitos. Guardamos solo un resumen
+            cifrado del código, su vencimiento y cuántas veces se intentó usar.
           </li>
           <li>
             <strong>Dirección IP:</strong> como cualquier servicio en internet, nuestro servidor
@@ -162,7 +162,10 @@ const SECTIONS: readonly LegalSection[] = [
           permiso de notificaciones se usa solo para mostrar el cronómetro mientras lees.
         </p>
         <p>
-          Esta web tampoco usa cookies, publicidad ni analítica, y no tiene formularios.
+          Esta web tampoco usa cookies, publicidad ni analítica. Su único formulario es el de{' '}
+          <a href="/eliminar-cuenta">Eliminar tu cuenta</a>: envía directamente a nuestro servidor
+          el correo que escribes y, después, el código que te llega; la web no guarda nada en tu
+          navegador.
         </p>
       </>
     ),
@@ -241,7 +244,8 @@ const SECTIONS: readonly LegalSection[] = [
         <ul>
           <li>
             <strong>ZeptoMail (Zoho)</strong>, para enviar correos (hoy, los códigos para crear
-            una contraseña nueva). Recibe tu correo, tu nombre de usuario y el código.
+            una contraseña nueva y para eliminar tu cuenta desde la web). Recibe tu correo, tu
+            nombre de usuario y el código.
           </li>
           <li>
             <strong>Open Library</strong> (Internet Archive), el catálogo de libros. Cuando buscas
@@ -309,9 +313,10 @@ const SECTIONS: readonly LegalSection[] = [
             si alguien intenta reutilizar una robada.
           </li>
           <li>
-            <strong>Códigos de recuperación:</strong> valen 15 minutos y admiten 5 intentos. Su
-            registro (solo el resumen cifrado, nunca el código) queda asociado a tu cuenta hasta
-            que la eliminas.
+            <strong>Códigos por correo</strong> (crear una contraseña nueva o eliminar tu cuenta):
+            valen 15 minutos y admiten 5 intentos. Su registro (solo el resumen cifrado, nunca el
+            código) queda asociado a tu cuenta hasta que la eliminas; los de eliminación vencidos
+            se borran además en las tareas de mantenimiento del servidor.
           </li>
           <li>
             <strong>Dirección IP para limitar intentos:</strong> solo en la memoria del servidor,
@@ -338,7 +343,7 @@ const SECTIONS: readonly LegalSection[] = [
         <p>
           <strong>Si eliminas tu cuenta</strong>, borramos al instante tu cuenta y todo lo
           asociado a ella: lecturas, reseñas, sesiones de lectura, metas, los «me gusta» que diste
-          y los que recibieron tus reseñas, credenciales de sesión y códigos de recuperación. Si
+          y los que recibieron tus reseñas, credenciales de sesión y códigos enviados por correo. Si
           hubo acciones de moderación sobre tu cuenta, conservamos el registro interno de qué se
           hizo y cuándo, pero sin el vínculo con tu cuenta. Puede quedar una copia en respaldos
           puntuales guardados en el mismo servidor, que solo usamos para recuperar el servicio
@@ -370,7 +375,8 @@ const SECTIONS: readonly LegalSection[] = [
           oculto hasta que la reactives; ver los{' '}
           <a href="/terminos#desactivar">Términos</a>). También puedes{' '}
           <strong>eliminar tu cuenta</strong> y todos sus datos en{' '}
-          <strong>Perfil → Ajustes → Cuenta → Eliminar mi cuenta</strong> (ver los{' '}
+          <strong>Perfil → Ajustes → Cuenta → Eliminar mi cuenta</strong>, o sin la app, desde la
+          web en <a href="/eliminar-cuenta">Eliminar tu cuenta</a> (ver los{' '}
           <a href="/terminos#eliminar">Términos</a>). Para todo lo demás, o si no puedes entrar a
           la app, escríbenos a <MailLink /> <strong>desde el correo de tu cuenta</strong> (así
           comprobamos que eres tú) e indica tu nombre de usuario. Es gratis y te responderemos
@@ -397,8 +403,9 @@ const SECTIONS: readonly LegalSection[] = [
             una contraseña nueva se cierran las sesiones de todos tus dispositivos.
           </li>
           <li>
-            Limitamos los intentos de inicio de sesión y de recuperación. Al iniciar sesión o
-            pedir un código de recuperación, no revelamos si un correo tiene cuenta en LectorApp.
+            Limitamos los intentos de inicio de sesión, de recuperación y de eliminación desde la
+            web. Al iniciar sesión o pedir un código por correo, no revelamos si un correo tiene
+            cuenta en LectorApp.
           </li>
         </ul>
         <p>

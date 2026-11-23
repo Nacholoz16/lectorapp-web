@@ -262,6 +262,142 @@ main {
   padding-block: var(--s4);
 }
 
+/* --- Formularios (solo /eliminar-cuenta, tarea 2.3) --- */
+.field {
+  margin-bottom: var(--s20);
+}
+
+.field label {
+  display: block;
+  margin-bottom: var(--s8);
+  font-weight: 700;
+}
+
+.field input[type='email'],
+.field input[type='text'] {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  min-height: 48px;
+  padding: var(--s12) var(--s16);
+  border: 1px solid var(--text-secondary); /* borde ≥ 3:1 (WCAG 1.4.11) */
+  border-radius: var(--r-small);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.field input[aria-invalid='true'] {
+  border: 2px solid var(--danger);
+}
+
+/* El código se lee mejor espaciado y con números de ancho fijo. */
+#codigo {
+  max-width: 12rem;
+  font-size: 1.375rem;
+  letter-spacing: 0.3em;
+  font-variant-numeric: tabular-nums;
+}
+
+.field-help {
+  margin: var(--s8) 0 0;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.field-error {
+  margin: var(--s8) 0 0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.field-error::before {
+  content: '⚠ '; /* no depender solo del color */
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s12);
+}
+
+.checkbox-field input {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: 0.15rem 0 0;
+  accent-color: var(--danger);
+}
+
+.checkbox-field label {
+  margin: 0;
+  font-weight: 600;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+button.button {
+  border: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.button-danger {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s12);
+  margin-top: var(--s8);
+}
+
+.secondary-actions {
+  margin-top: var(--s24);
+}
+
+.delete-flow h3 {
+  margin-bottom: var(--s16);
+}
+
+/* Vacía no ocupa sitio, pero sigue en el árbol de accesibilidad (con display:none algunos
+   lectores de pantalla no anunciarían el primer aviso). */
+.status-message:empty {
+  margin: 0;
+  padding: 0;
+}
+
+.status-message,
+.notice {
+  padding: var(--s12) var(--s16);
+  border-radius: var(--r-small);
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+[hidden] {
+  display: none !important;
+}
+
 /* --- Pie --- */
 .site-footer {
   border-top: 1px solid var(--outline);

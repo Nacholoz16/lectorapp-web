@@ -16,6 +16,8 @@
   --text: #3d4042;            /* 10.1:1 sobre --bg */
   --text-secondary: #6b6f72;  /* 4.9:1 sobre --bg, 5.1:1 sobre --card */
   --outline: #e3e1dc;
+  --danger: #b33b4e;          /* acciones destructivas y errores: 5.6:1 sobre --bg; blanco encima 5.75:1 */
+  --on-danger: #ffffff;
   --focus: #4f7a70;
   --shadow: 0 8px 24px rgb(139 168 159 / 0.1);
 
@@ -55,6 +57,8 @@
     --text: #e7e5e4;
     --text-secondary: #a8a29e; /* 6.9:1 sobre --bg, 6.0:1 sobre --card */
     --outline: #44403c;
+    --danger: #ef9a9a;        /* 8.1:1 sobre --bg, 7.0:1 sobre --card */
+    --on-danger: #1c1917;     /* 8.1:1 sobre --danger */
     --focus: #b59e86;
     --shadow: none;           /* en oscuro no hay sombra: se diferencia con --card */
 

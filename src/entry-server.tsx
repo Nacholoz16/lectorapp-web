@@ -5,7 +5,9 @@
  *
  * React se usa aquí como motor de plantillas: renderToStaticMarkup produce HTML final,
  * sin JavaScript en el navegador. Las páginas públicas no necesitan JS y así la CSP
- * puede ser estricta (script-src 'self' sin nada inline).
+ * puede ser estricta (script-src 'self' sin nada inline). La excepción es la página que declare
+ * `clientScript` (hoy solo /eliminar-cuenta): se devuelve aparte y quien arma el HTML (el plugin
+ * de desarrollo o scripts/prerender.ts) añade su <script type="module" src="…">.
  */
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Layout } from './components/Layout';
@@ -18,10 +20,15 @@ export interface RenderResult {
   head: string;
   /** Contenido de <body>. */
   html: string;
+  /** Módulo de navegador de la página (ruta del código fuente), si lo tiene. */
+  clientScript: string | null;
 }
 
 /** Páginas a generar en el build (incluida la 404). */
-export const OUTPUT_PAGES: readonly Pick<PageDefinition, 'path' | 'file'>[] = [...PAGES, NOT_FOUND_PAGE];
+export const OUTPUT_PAGES: readonly Pick<PageDefinition, 'path' | 'file' | 'clientScript'>[] = [
+  ...PAGES,
+  NOT_FOUND_PAGE,
+];
 
 function normalizePath(path: string): string {
   const withoutQuery = path.split(/[?#]/, 1)[0] ?? '/';
@@ -54,5 +61,6 @@ export function render(path: string): RenderResult {
     status: isNotFound ? 404 : 200,
     head: renderHead(target, isNotFound),
     html: renderToStaticMarkup(<Layout>{target.render()}</Layout>),
+    clientScript: target.clientScript ?? null,
   };
 }

@@ -1,7 +1,7 @@
 import { MailLink } from '../components/MailLink';
 import { SITE } from '../site';
 
-/** Contacto: un único correo para todo (no hay formulario: la web no tiene JavaScript ni backend). */
+/** Contacto: un único correo para todo (sin formulario de contacto; eliminar la cuenta tiene su página). */
 export function ContactPage() {
   return (
     <div className="stack">
@@ -36,7 +36,8 @@ export function ContactPage() {
           <li>
             <strong>Eliminar tu cuenta</strong> y todos sus datos, de forma definitiva, si no
             puedes hacerlo tú en la app (<strong>Perfil → Ajustes → Cuenta → Eliminar mi
-            cuenta</strong>).
+            cuenta</strong>) ni en la web, en{' '}
+            <a href="/eliminar-cuenta">Eliminar tu cuenta</a>.
           </li>
         </ul>
       </section>

@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { ContactPage } from './pages/ContactPage';
+import { DeleteAccountPage } from './pages/DeleteAccountPage';
 import { HomePage } from './pages/HomePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { PrivacyPage } from './pages/PrivacyPage';
@@ -15,6 +16,13 @@ export interface PageDefinition {
   /** <meta name="description">: lo que muestran los buscadores. */
   description: string;
   render: () => ReactElement;
+  /**
+   * Módulo de navegador para esta página (ruta del código fuente, p. ej.
+   * 'src/client/delete-account.ts'). Por defecto las páginas NO llevan JavaScript; solo las que
+   * lo necesitan de verdad lo declaran aquí, y además debe estar en `build.rolldownOptions.input`
+   * de vite.config.ts para que el build lo genere.
+   */
+  clientScript?: string;
 }
 
 /**
@@ -53,6 +61,16 @@ export const PAGES: readonly PageDefinition[] = [
     description:
       'Escríbenos para dudas, denuncias, apelaciones, solicitudes sobre tus datos o para eliminar tu cuenta.',
     render: () => <ContactPage />,
+  },
+  {
+    // Enlace que se registra en Play Console ("URL para eliminar la cuenta").
+    path: '/eliminar-cuenta',
+    file: 'eliminar-cuenta.html',
+    title: 'Eliminar tu cuenta',
+    description:
+      'Elimina tu cuenta de LectorApp y todos sus datos desde la web, sin tener la app instalada.',
+    render: () => <DeleteAccountPage />,
+    clientScript: 'src/client/delete-account.ts',
   },
 ];
 
